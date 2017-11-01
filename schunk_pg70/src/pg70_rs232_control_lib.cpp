@@ -489,10 +489,10 @@ PG70_serial::timerCallback(const ros::TimerEvent &event)
   pg70_joint_state_.name.clear();
   pg70_joint_state_.position.clear();
     
-  pg70_joint_state_.name.push_back("pg70_finger1_joint");
+  pg70_joint_state_.name.push_back("schunk_pg70_finger_right_joint");
   pg70_joint_state_.position.push_back(act_position_/URDF_SCALE_FACTOR);
   
-  pg70_joint_state_.name.push_back("pg70_finger2_joint");
+  pg70_joint_state_.name.push_back("schunk_pg70_finger_left_joint");
   pg70_joint_state_.position.push_back(act_position_/URDF_SCALE_FACTOR);
    
   joint_pub.publish(pg70_joint_state_);         

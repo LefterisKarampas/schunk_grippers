@@ -35,3 +35,5 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS} schunk_pg70_gencpp)
 target_link_libraries(${PROJECT_NAME} ${ROS_LIBRARIES} ${catkin_LIBRARIES})
 
+add_executable(pg70_move ${PROJECT_SOURCE_DIR}/src/pg70_move.cpp)
+target_link_libraries(pg70_move ${ROS_LIBRARIES} ${catkin_LIBRARIES})

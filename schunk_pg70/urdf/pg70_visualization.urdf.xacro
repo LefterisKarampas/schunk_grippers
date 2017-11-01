@@ -5,9 +5,8 @@
   
   <link name="base_link" />
   
-  
   <xacro:schunk_pg70 name="schunk_pg70" parent="base_link" >
-    <origin xyz="0 0 0" rpy="0 -${pi/2} 0" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:schunk_pg70>
 
  </robot>

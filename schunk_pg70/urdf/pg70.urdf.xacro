@@ -2,8 +2,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="$(find schunk_pg70)/urdf/pg70.transmission.xacro" />
   <xacro:include filename="$(find schunk_pg70)/urdf/pg70.gazebo.xacro" />
-
   <xacro:macro name="schunk_pg70" params="parent name *origin ">
+
     <joint name="${name}_base_joint" type="fixed" >
       <parent link="${parent}" />
       <child link="${name}_base_link" />
@@ -15,23 +15,34 @@
     <link name="${name}_base_link">
       <visual>
         <geometry>
-          <mesh filename="package://schunk_pg70/meshes/tool_frame.stl" />
+          <mesh filename="package://schunk_pg70/meshes/pg70.dae" />
         </geometry>
         <material name="blue">
-           <color rgba="0.549019608 0.450980392 0.235294118 1" />
+          <color rgba="0 0 1 1"/>
         </material>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://schunk_pg70/meshes/tool_frame.stl" />
+          <mesh filename="package://schunk_pg70/meshes/pg70.dae" />
         </geometry>
+	<material name="blue"/>
       </collision>
-      <inertial>
-        <origin xyz="0.042814 -0.015479 0.0" rpy="0 0 0"/>
-       <mass value="1.4"/>
-          <inertia ixx="0.000002" ixy="0.000000" ixz="0.000000" iyy="0.000001" iyz="0.000000" izz="0.000002" />
-    </inertial>
+      <inertia>
+          <origin xyz="0.000019 -0.000347 0.028892"/>
+         <mass value="0.0"/>
+         <inertia ixx="0.000002" ixy="0.0" ixz="0.0" iyy="0.000001" iyz="0.0" izz="0.000002"/>
+      </inertia>
     </link>
+
+<!-- LEFT FINGER BASE -->
+    
+    <joint name="${name}_finger_left_joint" type="prismatic" >
+      <parent link="${name}_base_link" />
+      <child link="${name}_finger_left_link" />
+      <limit effort="100" lower="-0.001" upper="0.04" velocity="2.0"/>
+      <origin xyz="0 0 0.0789" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+    </joint>
 
     <link name="${name}_finger_left_link">
       <visual>
@@ -46,18 +57,23 @@
         <geometry>
           <box size="0.03 0.01 0.01"/>
         </geometry>
+	<material name="black" />
       </collision>
-      <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="0.01"/>
-          <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
-      </inertial>
+       <inertial> <origin xyz="0 0 0" rpy="0 0 0"/> <mass value="1"/> <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/> </inertial>
     </link>
+    
+<!-- LEFT FINGERTIP -->
+    
+    <joint name="${name}_fingertip_left_joint" type="fixed" >
+      <parent link="${name}_finger_left_link" />
+      <child link="${name}_fingertip_left_link" />
+      <origin xyz="0 0.01 0.045" rpy="0 0 0"/>
+    </joint>
 
     <link name="${name}_fingertip_left_link">
       <visual>
         <geometry>
-           <mesh filename="package://schunk_pg70/meshes/tip.stl" />
+          <box size="0.03 0.01 0.1"/>
         </geometry>
         <material name="silver">
           <color rgba="0.8 0.8 0.8 1"/>
@@ -65,96 +81,66 @@
       </visual>
       <collision>
         <geometry>
-           <mesh filename="package://schunk_pg70/meshes/tip.stl" />
+          <box size="0.03 0.01 0.1"/>
         </geometry>
+	<material name="black"/>
       </collision>
-      <inertial>
-        <origin xyz="-0.001245 0.029667 0" rpy="0 0 0"/>
-        <mass value="0.01"/>
-          <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
-      </inertial>
     </link>
-
-
-    <!-- LEFT FINGER BASE -->
     
-    <joint name="${name}_finger_left_joint" type="prismatic" >
+<!-- RIGHT FINGER BASE -->
+
+    <joint name="${name}_finger_right_joint" type="prismatic" >
+      <mimic joint="${name}_finger_left_joint" multiplier="1" offset="0"/>
       <parent link="${name}_base_link" />
-      <child link="${name}_finger_left_link" />
-      <limit effort="100" lower="0.001" upper="0.04" velocity="2.0"/>
-      <origin xyz="0.092 0.0 0.0" rpy="0 ${pi/2} 0"/>
-      <axis xyz="0 1 0" />
+      <child link="${name}_finger_right_link" />
+      <limit effort="100" lower="-0.001" upper="0.04" velocity="2.0"/>
+      <origin xyz="0 0 0.0789" rpy="-0 0 0"/>
+      <axis xyz="0 -1 0" />
     </joint>
-    
-<!-- LEFT FINGERTIP -->
-    
-    <joint name="${name}_fingertip_left_joint" type="fixed" >
-      <parent link="${name}_finger_left_link" />
-      <child link="${name}_fingertip_left_link" />
-      <origin xyz="0 0.00 0.00" rpy="${pi/2} 0 ${pi/2}"/>
-    </joint>
-
-
 
     <link name="${name}_finger_right_link">
       <visual>
         <geometry>
           <box size="0.03 0.01 0.01"/>
         </geometry>
-	      <material name="black"/>
+	<material name="black"/>
       </visual>
       <collision>
         <geometry>
           <box size="0.03 0.01 0.01"/>
         </geometry>
+	<material name="black"/>
       </collision>
-      <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="0.01"/>
-          <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
-      </inertial>
-    </link>
-
-     <link name="${name}_fingertip_right_link">
-      <visual>
-        <geometry>
-          <mesh filename="package://schunk_pg70/meshes/tip.stl" />
-        </geometry>
-        <material name="silver" />
-      </visual>
-      <collision>
-        <geometry>
-         <mesh filename="package://schunk_pg70/meshes/tip.stl" />
-        </geometry>
-     </collision>
-     <inertial>
-        <origin xyz="-0.001245 0.029667 0" rpy="0 0 0"/>
-        <mass value="0.01"/>
-          <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
-      </inertial>
+       <inertial> <origin xyz="0 0 0" rpy="0 0 0"/> <mass value="1"/> <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/> </inertial>
     </link>
     
-
-<!-- RIGHT FINGER BASE -->
-    <joint name="${name}_finger_right_joint" type="prismatic" >
-      <!--<mimic joint="${name}_finger_left_joint" multiplier="1" offset="0"/>-->
-      <parent link="${name}_base_link" />
-      <child link="${name}_finger_right_link" />
-      <limit effort="100" lower="0.001" upper="0.04" velocity="2.0"/>
-      <origin xyz="0.092 0.0 0.0" rpy="0 ${pi/2} 0"/>
-      <axis xyz="0 -1 0" />
-    </joint>
-
 <!-- RIGHT FINGERTIP -->
+
     <joint name="${name}_fingertip_right_joint" type="fixed" >
       <parent link="${name}_finger_right_link" />
       <child link="${name}_fingertip_right_link" />
-      <origin xyz="0 0.00 0.00" rpy="${pi/2} 0 ${pi/2}"/>
+      <origin xyz="0 -0.01 0.045" rpy="0 0 0"/>
    </joint>
 
-    <xacro:schunk_pg70_gazebo name="${name}" />
-    <xacro:schunk_pg70_transmission name="${name}" />
-  </xacro:macro>
+    <link name="${name}_fingertip_right_link">
+      <visual>
+        <geometry>
+          <box size="0.03 0.01 0.1"/>
+        </geometry>
+	<material name="silver" />
+       
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.03 0.01 0.1"/>
+        </geometry>
+	<material name="black"/>
+     </collision>
+    </link>
 
+    <xacro:schunk_pg70_transmission name="${name}"/>
+    <xacro:schunk_pg70_gazebo name="${name}" />
+
+  </xacro:macro>
 </robot>
 
